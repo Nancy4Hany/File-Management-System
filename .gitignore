@@ -1,0 +1,17 @@
+
+.venv/
+pip_cache/
+__pycache__/
+*.env
+secret.key
+uploads/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+logs/
+*.log
+*.cache
+.vscode/
+.idea/

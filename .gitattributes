@@ -1,0 +1,10 @@
+# Force LF line endings for shell scripts and code files
+*.sh text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+
+# Force CRLF line endings for files that require Windows format
+*.bat text eol=crlf
+*.cmd text eol=crlf

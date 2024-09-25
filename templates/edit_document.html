@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Edit Document</h1>
+
+    <form method="POST" action="{{ url_for('main.edit_document', document_id=document.id) }}">
+        <div class="form-group">
+            <label for="title">Document Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ document.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Document Description</label>
+            <textarea class="form-control" id="description" name="description" rows="5">{{ document.description }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{{ url_for('main.list_documents') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

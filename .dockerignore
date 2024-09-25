@@ -1,0 +1,12 @@
+.git
+__pycache__
+*.pyc
+uploads/
+controllers/__pycache__
+.venv/
+.env
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+pip_cache 

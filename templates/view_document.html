@@ -1,0 +1,14 @@
+
+<h2>Document Details</h2>
+<p><strong>Title:</strong> {{ document.title }}</p>
+<p><strong>Description:</strong> {{ document.description }}</p>
+<p><strong>File URL:</strong> {{ document.file_url }}</p>
+
+{% if metadata %}
+<h3>File Metadata</h3>
+<ul>
+    <li><strong>File Size:</strong> {{ metadata.file_size }} bytes</li>
+    <li><strong>Created At:</strong> {{ metadata.created_at }}</li>
+    <li><strong>Last Modified:</strong> {{ metadata.modified_at }}</li>
+</ul>
+{% endif %}
