@@ -1,7 +1,7 @@
 
 import pytest
 from app import create_app
-from extensions import db
+from config.extensions import db
 @pytest.fixture
 def client():
     app = create_app()

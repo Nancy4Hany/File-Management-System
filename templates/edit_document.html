@@ -13,7 +13,7 @@
 <div class="container mt-5">
     <h1>Edit Document</h1>
 
-    <form method="POST" action="{{ url_for('main.edit_document', document_id=document.id) }}">
+    <form method="POST" action="{{ url_for('document.edit_document_route', document_id=document.id) }}">
         <div class="form-group">
             <label for="title">Document Title</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ document.title }}" required>
@@ -25,7 +25,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a href="{{ url_for('main.list_documents') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ url_for('document.list_or_search_documents') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

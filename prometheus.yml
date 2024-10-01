@@ -5,23 +5,21 @@ scrape_configs:
   - job_name: 'flask_app'
     static_configs:
       - targets: ['web:5000']
-    tls_config:
-      insecure_skip_verify: true
-
 
   - job_name: 'fastapi_app'
     static_configs:
       - targets: ['fastapi-app:8000'] 
 
   - job_name: 'redis'
+    scrape_interval: 30s
     static_configs:
-      - targets: ['redis:6379']  
+      - targets: ['redis-exporter:9121']  
 
   - job_name: 'elasticsearch'
+    scrape_interval: 30s
     static_configs:
-      - targets: ['elasticsearch:9200'] 
+      - targets: ['elasticsearch-exporter:9114']
 
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090'] 
-
+      - targets: ['prometheus:9090']

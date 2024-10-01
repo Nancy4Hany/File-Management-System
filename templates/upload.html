@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Upload a New Document</h1>
+    <h1 class="mt-5">Upload New Documents</h1>
 
     <form id="uploadForm" method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -16,46 +16,83 @@
             <input type="text" class="form-control" name="title" placeholder="Enter the document title" required>
         </div>
 
-
         <div class="form-group">
             <label for="description">Description</label>
             <textarea class="form-control" name="description" placeholder="Enter a description for the document" required></textarea>
         </div>
 
-
         <div class="form-group">
-            <label for="file">File</label>
-            <input type="file" class="form-control-file" name="file" required>
+            <label for="file">File(s)</label>
+            <input type="file" class="form-control-file" name="file" multiple required>
         </div>
-
 
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary">Upload</button>
         </div>
     </form>
+
+    <div id="taskStatus" class="mt-4">
+       
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $('#uploadForm').submit(function(event) {
-        event.preventDefault();  
+    event.preventDefault(); 
 
-        let formData = new FormData(this);
+    let formData = new FormData(this);  
 
+    $.ajax({
+        url: '/documents/upload',
+        method: 'POST',
+        data: formData,
+        contentType: false, 
+        processData: false,  
+        success: function(response) {
+            alert('Documents uploaded successfully!');
+
+
+            response.task_ids.forEach(function(taskId) {
+                checkTaskStatus(taskId);  
+            });
+        },
+        error: function(response) {
+            alert('Error uploading documents: ' + JSON.stringify(response.responseJSON));
+        }
+    });
+});
+
+function checkTaskStatus(taskId) {
+    let retries = 0;
+    let maxRetries = 10;  
+
+    let intervalId = setInterval(function() {
         $.ajax({
-            url: '/upload',
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
+            url: 'task_status/' + taskId,  
+            method: 'GET',
             success: function(response) {
-                alert('Document uploaded successfully!');
+                $('#taskStatus').append(`<p>Task ID: ${taskId} - Task Status: ${response.state}</p>`);
+                
+             
+                if (response.state === 'SUCCESS' || response.state === 'FAILURE') {
+                    clearInterval(intervalId);  
+                }
+
+           
+                if (retries >= maxRetries) {
+                    clearInterval(intervalId);
+                    $('#taskStatus').append(`<p>Task ID: ${taskId} - Task polling stopped after ${maxRetries} retries.</p>`);
+                }
+
+                retries++;
             },
-            error: function(response) {
-                alert('Error uploading document: ' + JSON.stringify(response.responseJSON));
+            error: function() {
+                $('#taskStatus').append(`<p>Failed to retrieve task status for task ID: ${taskId}</p>`);
             }
         });
-    });
+    }, 5000);  
+}
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

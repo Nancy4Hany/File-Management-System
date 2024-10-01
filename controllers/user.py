@@ -1,38 +1,24 @@
-from flask import request
+from flask import Blueprint, jsonify, render_template, request
+from flask_jwt_extended import current_user, get_jwt_identity, jwt_required
+from controllers.auth import role_required
 from models.user import User
-from extensions import db
+from config.extensions import db
 
-def add_user_function():
-    if request.method == "POST":
-        name=request.form['name']
-        email=request.form['email']
-        password=request.form['password']
-        user=User(
-            name=name,
-            email=email,
-            password=password
-        )
-        
-        user.save()
-        data={
-            'id':user.id,
-            'name':user.name,
-            'email':user.email,
-            'password':user.password
-        }
-        return data
-        
-def edit_user_function(data):
-    if request.method == "POST":
-        data.name = request.form['name']
-        data.email = request.form['email']
-        data.password = request.form['password']
-        
-        db.session.commit()
-        return data
-    
-def delete_user_function(user):
-    db.session.delete(user)
-    db.session.commit()
-  
-            
+user = Blueprint('user', __name__)  
+
+def load_user_from_jwt(identity):
+    return User.query.get(identity)
+
+@user.route('/home')
+@jwt_required()
+@role_required('user')
+def home():
+    current_user_id = get_jwt_identity() 
+    user = load_user_from_jwt(current_user_id)
+
+    if user:
+            if user.is_blocked:  
+                return render_template('blocked.html')
+            return render_template('home.html', user=user, show_back_button=False)
+    else:
+        return jsonify({'error': 'User not found'}), 404

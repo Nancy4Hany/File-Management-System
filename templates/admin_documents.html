@@ -25,12 +25,14 @@
                 <td>{{ document.id }}</td>
                 <td>{{ document.title }}</td>
                 <td>{{ document.description }}</td>
-                <td>{{ 'Spam' if document.is_spam else 'Clean' }}</td>
+                <td id="status-{{ document.id }}">{{ 'Spam' if document.is_spam else 'Clean' }}</td>
                 <td>
-                    <a href="{{ url_for('admin.spam_document', doc_id=document.id) }}" class="btn btn-warning">
-                        {{ 'Unmark Spam' if document.is_spam else 'Mark as Spam' }}
-                    </a>
-                    <a href="{{ url_for('main.view_document', document_id=document.id) }}" class="btn btn-info">View</a>
+                    <form action="{{ url_for('admin.admin_spam_document', document_id=document.id) }}" method="POST" style="display:inline-block;" data-document-id="{{ document.id }}">
+                        <button type="submit" class="btn btn-{{ 'warning' if document.is_spam else 'success' }}">
+                            {{ 'Unmark Spam' if document.is_spam else 'Mark as Spam' }}
+                        </button>
+                    </form>
+                    <a href="{{ url_for('document.fetch_document_metadata_route', document_id=document.id) }}" class="btn btn-info">View</a>
                 </td>
             </tr>
             {% endfor %}
@@ -38,5 +40,48 @@
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('form');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                const documentId = this.dataset.documentId; 
+
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+
+                        const statusElement = document.getElementById('status-' + documentId);
+                        if (statusElement) {
+                            statusElement.textContent = data.message.includes('marked') ? 'Spam' : 'Clean';
+                        }
+
+                        const buttonText = this.querySelector('button');
+                        if (data.message.includes('marked')) {
+                            buttonText.textContent = 'Unmark Spam';
+                            buttonText.classList.remove('btn-success');
+                            buttonText.classList.add('btn-warning');
+                        } else {
+                            buttonText.textContent = 'Mark as Spam';
+                            buttonText.classList.remove('btn-warning');
+                            buttonText.classList.add('btn-success');
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+</script>
 </body>
 </html>

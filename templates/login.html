@@ -24,6 +24,11 @@
                             </div>
                             <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
                         </form>
+
+                
+                        <div class="text-center">
+                            <p>Don't have an account? <a href="/auth/signup" class="btn btn-link">Sign Up</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,7 +36,6 @@
     </div>
 
     <script>
-   
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -40,23 +44,29 @@
 
             const payload = { email, password };
 
-            fetch('/login', {
+            fetch('/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/home';  
+            .then(response => response.json())  // Parse the response as JSON
+            .then(data => {
+                if (data.token) {
+                    // JWT token is present, store it as needed
+                    localStorage.setItem('token', data.token);
+
+                    // Redirect to the correct URL based on user role
+                    window.location.href = data.redirect_url;
                 } else {
-                    alert('Login failed. Please check your credentials.');
+                    // Handle login errors
+                    alert(data.error || 'Login failed. Please check your credentials.');
                 }
             })
             .catch(error => {
                 console.error("Error during login:", error);
-                alert('An error occurred during login.');
+                alert('Login failed: Unknown error occurred.');
             });
         });
     </script>

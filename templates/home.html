@@ -1,105 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Dashboard - Document Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f2ee;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+{% extends 'base_user.html' %}
 
-        .card-link {
-            text-decoration: none;
-            color: black;
-        }
+{% block title %}User Dashboard{% endblock %}
 
-        .container {
-            flex: 1;
-        }
-
-        .footer {
-            background-color: #343a40;
-            color: white;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .row.justify-content-center {
-            margin-top: 50px;
-        }
-    </style>
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Document Management</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/documents">View Documents</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/upload">Upload Document</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container text-center">
-        <h1 class="mt-4">Welcome, {{ user.name }}</h1> <!-- Rendered user data from the route -->
-        <p>What would you like to do today?</p>
-
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">View Your Documents</h5>
-                        <p class="card-text">Browse and manage your uploaded documents.</p>
-                        <a href="/documents" class="text-black card-link btn btn-light">View Documents</a>
-                    </div>
+{% block content %}
+    <h1>Welcome, {{ user.name }}</h1>
+    <p>What would you like to do today?</p>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">View Your Documents</h5>
+                    <p class="card-text">Browse and manage your uploaded documents.</p>
+                    <a href="/documents/documents" class="btn btn-primary">View Documents</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Upload a New Document</h5>
-                        <p class="card-text">Easily upload new documents to manage and process.</p>
-                        <a href="/upload" class="text-black card-link btn btn-light">Upload Document</a>
-                    </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Upload a New Document</h5>
+                    <p class="card-text">Upload and manage your new documents.</p>
+                    <a href="/documents/upload" class="btn btn-success">Upload Document</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <footer class="footer text-center py-3">
-        <p class="mb-0">Document Management System &copy; 2024. All rights reserved.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    
+{% endblock %}

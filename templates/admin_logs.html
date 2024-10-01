@@ -9,7 +9,7 @@
 <body>
 <div class="container mt-5">
     <h2>Logs</h2>
-    <form method="GET" action="{{ url_for('main.admin_logs') }}">
+    <form method="GET" action="{{ url_for('admin.view_logs') }}">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Search logs" name="query" value="{{ request.args.get('query', '') }}">
             <button class="btn btn-primary" type="submit">Search</button>

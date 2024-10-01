@@ -1,4 +1,4 @@
-from extensions import db
+from config.extensions import db
 
 class Log(db.Model):
     __tablename__ = 'logs'

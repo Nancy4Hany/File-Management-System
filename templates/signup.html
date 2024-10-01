@@ -14,7 +14,6 @@
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4">Sign Up</h2>
                         <form method="POST" id="signupForm">
-
                             <div class="form-outline mb-4">
                                 <input type="text" id="registerName" name="name" class="form-control" required />
                                 <label class="form-label" for="registerName">Name</label>
@@ -29,6 +28,11 @@
                             </div>
                             <button type="submit" class="btn btn-primary btn-block mb-4">Sign Up</button>
                         </form>
+
+          
+                        <div class="text-center">
+                            <p>Already have an account? <a href="/auth/login" class="btn btn-link">Login</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,7 +40,6 @@
     </div>
 
     <script>
-
         document.getElementById('signupForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -46,7 +49,7 @@
 
             const payload = { name, email, password };
 
-            fetch('/signup', {
+            fetch('/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,7 +58,7 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = '/login';  
+                    window.location.href = '/auth/login';  
                 } else {
                     alert('Signup failed. Please check your information.');
                 }
